@@ -1,0 +1,28 @@
+version: "2.0"
+services:
+    logstash:
+        build:
+            context: ./logstash
+            dockerfile: Dockerfile
+        links: 
+            - elasticsearch
+    
+    kibana:
+        image: kibana
+        links: 
+            - elasticsearch
+        environment: 
+            - ELASTICSEARCH_URL=http://elasticsearch:9200
+        ports:
+            - 5601:5601
+    
+    elasticsearch:
+        image: elasticsearch:alpine
+        volumes: 
+            - ./elasticsearch:/usr/share/elasticsearch/data
+    parser:
+        build: parser
+        links:
+            - logstash
+        depends_on:
+            - logstash
