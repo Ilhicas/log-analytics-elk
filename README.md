@@ -7,7 +7,12 @@
 docker version >= 1.12
 docker-compose >= 1.9
 ## How to use
-docker-compose up -d
+docker-compose up -d elasticsearch kibana logstash
 
-Navigate to http://localhost:5601 and you will be presented with kibana dashboard. Wait a few minutes for logs to be inserted into elasticsearch
+
+Navigate to http://localhost:5601 and you will be presented with kibana dashboard, refresh until status red disappears from elasticsearch status presented on kibana
+
+then 
+
+docker-compose up -d parser
 
