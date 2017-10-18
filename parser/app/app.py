@@ -1,6 +1,7 @@
-import logging
-import logstash
-from logstash_formatter import LogstashFormatter
+#import logging
+#import logstash
+#from logstash_formatter import LogstashFormatter
+from db import db
 
 def parse(filename):
     comment = ";"
@@ -24,13 +25,13 @@ def parse(filename):
     return clean, partitions
 
 def logstash_input(clean, partitions):
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger()
-    formatter = LogstashFormatter()
-    handler = logstash.LogstashHandler("logstash", 5959)
-    handler.setFormatter(formatter)
+    # logging.basicConfig(level=logging.INFO)
+    # logger = logging.getLogger()
+    # formatter = LogstashFormatter()
+    # handler = logstash.LogstashHandler("logstash", 5959)
+    # handler.setFormatter(formatter)
     status = {"1":"Complete", "0":"Failed", "5":"Cancelled"}
-    logger.addHandler(handler)
+  #  logger.addHandler(handler)
     values = {0:"Job Number", 1:"Submit Time", 2:"Wait Time",
               3:"Run Time (seconds)", 4:"Number of Allocated Processes", 
               5:"Average CPU Time Used", 6:"Used Memory (Kb)", 7:"Requested Number of Processors",
@@ -49,10 +50,10 @@ def logstash_input(clean, partitions):
             if i == 10:
                 logged[values[i]] = status[elements[i]]
             else:
-                logged[values[i]] = elements[i]
+                logged[values[i]] = int(elements[i])
         
-        logger.info(str(position), extra=logged)
-        
+        db.create(index='mei-2017', doc_type='log', id=position, body=logged)
+        #logger.info(str(position), extra=logged)
 
 if __name__ == "__main__":
     

@@ -22,7 +22,5 @@ services:
             - ./elasticsearch:/usr/share/elasticsearch/data
     parser:
         build: parser
-        links:
-            - logstash
         depends_on:
             - logstash
