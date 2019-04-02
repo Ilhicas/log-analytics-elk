@@ -21,6 +21,8 @@ services:
         volumes: 
             - ./elasticsearch:/usr/share/elasticsearch/data
     parser:
-        build: parser
+        build: 
+            context: ./parser
+            dockerfile: Dockerfile
         depends_on:
             - logstash
